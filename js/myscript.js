@@ -2,9 +2,18 @@
   'use strict';
 
   var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q=',
+      iconStr = 'icons/weather/{icon}.png',
       search = '#search',
       canvasTemplate = '#canvas-template',
       canvas = '.y-chrome-ext-canvas';
+
+  function imgReplace(imgEl) {
+    if (!imgEl) {
+      return;
+    }
+    
+    imgEl.attr('src', imgEl.data('src'));
+  }
 
   function fetchWeather(location) {
 
@@ -19,7 +28,7 @@
       }
 
       var temp = Math.ceil(data.main.temp).toString(),
-          weatherIcon = ['icons/weather/', data.weather[0].icon, '.png'].join(''),
+          weatherIcon = Helper.bind(iconStr, { icon: data.weather[0].icon }),
           newCanvas;
 
       chrome.browserAction.setBadgeText({ text: temp });
@@ -37,6 +46,7 @@
       });
 
       $(canvas).html(newCanvas);
+      imgReplace($(canvas).find('img'));
 
       localStorage.setItem('location', location);
     }
@@ -50,7 +60,6 @@
     
   }
 
-
   function searchKeyUp(event) {
     if (event.keyCode !== 13) {
       return;
@@ -60,7 +69,6 @@
 
     fetchWeather(location);
   }
-
 
   $(document).ready(function () {
     if (localStorage.getItem('location')) {
