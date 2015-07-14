@@ -1,9 +1,12 @@
 (function ($, window) {
   'use strict';
 
-  var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q=',
+  var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units={units}&q={location}',
       iconStr = 'icons/weather/{icon}.png',
       search = '#search',
+      settingsBtn = '.settings__link',
+      settings = '.settings__area',
+      unitsDeg = '.settings__units',
       canvasTemplate = '#canvas-template',
       canvas = '.y-chrome-ext-canvas';
 
@@ -12,6 +15,7 @@
    * @param string search query
    */
   function fetchWeather(location) {    
+    var unitsCheck = localStorage.units || $(unitsDeg).val() || 'metric';
 
     /**
      * Handles errors
@@ -32,7 +36,8 @@
 
       var temp = Math.ceil(data.main.temp).toString(),
           weatherIcon = Helper.bind(iconStr, { icon: data.weather[0].icon }),
-          newCanvas;
+          newCanvas,
+          units = unitsCheck === 'metric' ? '&deg;C' : '&deg;F';
 
       chrome.browserAction.setBadgeText({ text: temp });
       chrome.browserAction.setIcon({ path: weatherIcon });
@@ -41,9 +46,9 @@
         icon: weatherIcon,
         name: data.name || 'N/A',
         description: data.weather[0].description || 'N/A',
-        temp: data.main.temp || 'N/A',
-        temp_max: data.main.temp_max || 'N/A',
-        temp_min: data.main.temp_min || 'N/A',
+        temp: data.main.temp + units,
+        temp_max: data.main.temp_max + units,
+        temp_min: data.main.temp_min + units,
         humidity: data.main.humidity || 'N/A',
         presure: data.main.presure || 'N/A'
       });
@@ -52,10 +57,13 @@
 
       Helper.imgReplace($(canvas).find('img'));
       localStorage.setItem('location', location);
-  }    
+    }    
 
     $.ajax({
-      url:  [weatherAPI, location].join(''),
+      url:  Helper.bind(weatherAPI, {
+        units: unitsCheck,
+        location: location
+      }),
       type: 'POST',
       success: successHandler,
       error: errorHandler
@@ -63,14 +71,31 @@
     
   }
 
+  /**
+   * Handles key press on search
+   * @param object containing weather data
+   */
   function searchKeyUp(event) {
     if (event.keyCode !== 13) {
       return;
     }
 
-    var location = $(this).val();
+    fetchWeather($(this).val());
+  }
 
-    fetchWeather(location);
+  function settingsClick() {
+    $(settings).toggle();
+  }
+
+  function unitsChange() {
+    var val = $(this).val();
+
+    if (val === '') {
+      return;
+    }
+
+    localStorage.units = val;
+    fetchWeather(localStorage.getItem('location'));
   }
 
   $(document).ready(function () {
@@ -79,6 +104,8 @@
     }
 
     $(search).on('keyup', searchKeyUp);
+    $(settingsBtn).on('click', settingsClick);
+    $(unitsDeg).on('change', unitsChange);
   });
 
 }(jQuery, window));

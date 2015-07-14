@@ -38,12 +38,11 @@
 .settings {
 	margin-top: 15px;
 	padding-top: 10px;
-	border-top: 1px solid #DDD
 }
 
 .settings__icon {
-	width: 25px;
-	height: 25px;
+	width: 20px;
+	height: 20px;
 	vertical-align: middle;
 }
 
@@ -52,3 +51,22 @@
 	color: #545454;
 }
 
+.settings__area {
+	display: none;
+	background: #EEE;
+	padding: 5px 10px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+.settings__units {
+	padding: 5px;
+	border: 1px solid #BEBEBE;
+	margin-left: 10px;
+	width: 75%;
+}
