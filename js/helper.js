@@ -1,5 +1,17 @@
-var Helper = (function () {
+var Helper = (function ($) {
 	'use strict';
+
+	/**
+	 * Sets image src attribute from its data-src
+	 * @param object
+	 */
+	function imgReplace(imgEl) {
+		if (!imgEl) {
+			return;
+		}
+
+		imgEl.attr('src', imgEl.data('src'));
+	}
 
 	/**
 	 * Checks and iterates through array and returns callback with each item
@@ -18,7 +30,6 @@ var Helper = (function () {
 		}
 	}
 
-
 	/**
 	 * Loops through object elements and returns a callback with object item
 	 * @param obj object containing items ex.: { item1: 'item1-value', item2: 'item2-value' }
@@ -33,7 +44,6 @@ var Helper = (function () {
 			}
 		}
 	}
-
 
 	/**
 	 * Binds data to string
@@ -98,6 +108,8 @@ var Helper = (function () {
 	}
 
 	return {
-		bind: bind
+		bind: bind,
+		imgReplace: imgReplace
 	};
-}());
+
+}(jQuery));

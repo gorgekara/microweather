@@ -7,24 +7,27 @@
       canvasTemplate = '#canvas-template',
       canvas = '.y-chrome-ext-canvas';
 
-  function imgReplace(imgEl) {
-    if (!imgEl) {
-      return;
-    }
-    
-    imgEl.attr('src', imgEl.data('src'));
-  }
+  /**
+   * Fetches weather data from source
+   * @param string search query
+   */
+  function fetchWeather(location) {    
 
-  function fetchWeather(location) {
-
-    function error() {
+    /**
+     * Handles errors
+     */
+    function errorHandler() {
       $(canvas).html('No city found. Please try again.');
       return;
     }
 
-    function success(data) {
+    /**
+     * Handles weather data on success
+     * @param object containing weather data
+     */
+    function successHandler(data) {
       if (!data || data.cod === '404') {
-        error();
+        errorHandler();
       }
 
       var temp = Math.ceil(data.main.temp).toString(),
@@ -46,16 +49,16 @@
       });
 
       $(canvas).html(newCanvas);
-      imgReplace($(canvas).find('img'));
 
+      Helper.imgReplace($(canvas).find('img'));
       localStorage.setItem('location', location);
-    }
+  }    
 
     $.ajax({
       url:  [weatherAPI, location].join(''),
       type: 'POST',
-      success: success,
-      error: error
+      success: successHandler,
+      error: errorHandler
     });
     
   }
