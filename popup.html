@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GTmetrix Analyzer</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/helper.js"></script>
+    <script type="text/javascript" src="js/myscript.js"></script>
+  </head>
+  <body>
+  	<input type="text" id="search" />
+
+	<div class="template" id="canvas-template">
+		<div class="popup-icon"></div>
+		<div class="name">{name}</div>
+  		<div class="description">{description}</div>
+  		<div class="temp"><img src="{icon}" class="weather-icon" /> {temp} &deg;C</div>
+  		<div class="pressure">Pressure: {presure}</div>
+  		<div class="humidity">Humidity: {humidity}</div>
+  		<div class="temp-max">Max: {temp_max}</div>
+  		<div class="temp-min">Min: {temp_min}</div>
+	</div>
+
+  	<section class="y-chrome-ext-canvas">
+  	</section>
+  	
+  	<!-- <section class="settings">
+  		<a href="#" class="settings__link">
+  			<img src="icons/settings.png" alt="Settings" class="settings__icon" />
+  			<span>Settings</span>
+  		</a>
+  	</section> -->
+
+  </body>
+</html>

@@ -1,0 +1,54 @@
+#search {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.y-chrome-ext-canvas {
+	width: 200px;
+}
+
+.template {
+	display: none;
+}
+
+.name {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 15px 0 5px 0;
+}
+
+.weather-icon {
+	vertical-align: middle;
+}
+
+.temp {
+	font-size: 30px;
+	margin: 10px 0;
+}
+
+.popup-icon {
+	position: absolute;
+	top: 100px;
+	right: 10px;
+}
+
+.settings {
+	margin-top: 15px;
+	padding-top: 10px;
+	border-top: 1px solid #DDD
+}
+
+.settings__icon {
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+}
+
+.settings__link {
+	text-decoration: none;
+	color: #545454;
+}
+
