@@ -35,7 +35,6 @@
 
     errorHandler = function () {
       $(canvas).html('No city found. Please try again.');
-      $(showForcastBtn).hide();
       return;
     };
 
@@ -72,6 +71,10 @@
     fetcher(h.bind(weatherAPI, { units: unitsCheck, location: location }), successHandler, errorHandler);
   }
 
+  /**
+   * Fetches weather forcast for the next few days
+   * @param string search query
+   */
   function fetchForcast(location, fetch) {
     var unitsCheck = localStorage.units || $(unitsDeg).val() || 'metric',
         successHandler,
@@ -79,7 +82,6 @@
 
     errorHandler = function () {
       $(canvas).html('No city found. Please try again.');
-      $(showForcastBtn).hide();
       return;
     };
 
@@ -172,20 +174,17 @@
       fetchWeather(localStorage.getItem('location'));
       fetchForcast(localStorage.getItem('location'));
     }
-
-    $(showForcastBtn).hide();
-    $(forcast).show();
   }
 
   $(document).ready(function () {
     if (localStorage.getItem('location')) {
       fetchWeather(localStorage.getItem('location'));
+      fetchForcast(localStorage.getItem('location'));
     }
 
     $(search).on('keyup', searchKeyUp);
     $(settingsBtn).on('click', settingsClick);
     $(unitsDeg).on('change', unitsChange);
-    $(showForcastBtn).on('click', showForcast);
   });
 
 }(jQuery, window, Helper));
