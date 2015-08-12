@@ -3,7 +3,7 @@
 
   "name": "MicroWeather",
   "description": "Simple weather application",
-  "version": "1.0",
+  "version": "1.2",
 
   "browser_action": {
     "default_icon": "icon.png",
