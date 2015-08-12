@@ -1,14 +1,14 @@
-(function ($, window) {
+(function ($, window, h) {
   'use strict';
 
   var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units={units}&q={location}',
       iconStr = 'icons/weather/{icon}.png',
-      search = '#search',
-      settingsBtn = '.settings__link',
-      settings = '.settings__area',
-      unitsDeg = '.settings__units',
-      canvasTemplate = '#canvas-template',
-      canvas = '.y-chrome-ext-canvas';
+      search = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #search',
+      settingsBtn = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__link',
+      settings = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__area',
+      unitsDeg = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__units',
+      canvasTemplate = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #canvas-template',
+      canvas = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .y-chrome-ext-canvas';
 
   /**
    * Fetches weather data from source
@@ -17,32 +17,25 @@
   function fetchWeather(location) {    
     var unitsCheck = localStorage.units || $(unitsDeg).val() || 'metric';
 
-    /**
-     * Handles errors
-     */
     function errorHandler() {
       $(canvas).html('No city found. Please try again.');
       return;
     }
 
-    /**
-     * Handles weather data on success
-     * @param object containing weather data
-     */
     function successHandler(data) {
       if (!data || data.cod === '404') {
         errorHandler();
       }
 
       var temp = Math.ceil(data.main.temp).toString(),
-          weatherIcon = Helper.bind(iconStr, { icon: data.weather[0].icon }),
+          weatherIcon = h.bind(iconStr, { icon: data.weather[0].icon }),
           newCanvas,
           units = unitsCheck === 'metric' ? '&deg;C' : '&deg;F';
 
       chrome.browserAction.setBadgeText({ text: temp });
       chrome.browserAction.setIcon({ path: weatherIcon });
       
-      newCanvas = Helper.bind($(canvasTemplate).html(), {
+      newCanvas = h.bind($(canvasTemplate).html(), {
         icon: weatherIcon,
         name: data.name || 'N/A',
         description: data.weather[0].description || 'N/A',
@@ -55,12 +48,12 @@
 
       $(canvas).html(newCanvas);
 
-      Helper.imgReplace($(canvas).find('img'));
+      h.imgReplace($(canvas).find('img'));
       localStorage.setItem('location', location);
     }    
 
     $.ajax({
-      url:  Helper.bind(weatherAPI, {
+      url:  h.bind(weatherAPI, {
         units: unitsCheck,
         location: location
       }),
@@ -108,4 +101,4 @@
     $(unitsDeg).on('change', unitsChange);
   });
 
-}(jQuery, window));
+}(jQuery, window, Helper));

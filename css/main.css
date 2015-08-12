@@ -1,4 +1,4 @@
-#search {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #search {
   width: 100%;
   padding: 5px;
   box-sizing: border-box;
@@ -6,52 +6,53 @@
   -moz-box-sizing: border-box;
 }
 
-.y-chrome-ext-canvas {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .y-chrome-ext-canvas {
+	margin-top: 10px;
 	width: 200px;
 }
 
-.template {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .template {
 	display: none;
 }
 
-.name {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .name {
 	font-size: 20px;
 	font-weight: bold;
 	margin: 15px 0 5px 0;
 }
 
-.weather-icon {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .weather-icon {
 	vertical-align: middle;
 }
 
-.temp {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .temp {
 	font-size: 30px;
 	margin: 10px 0;
 }
 
-.popup-icon {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .popup-icon {
 	position: absolute;
 	top: 100px;
 	right: 10px;
 }
 
-.settings {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings {
 	margin-top: 15px;
 	padding-top: 10px;
 }
 
-.settings__icon {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__icon {
 	width: 20px;
 	height: 20px;
 	vertical-align: middle;
 }
 
-.settings__link {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__link {
 	text-decoration: none;
 	color: #545454;
 }
 
-.settings__area {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__area {
 	display: none;
 	background: #EEE;
 	padding: 5px 10px;
@@ -64,9 +65,10 @@
 	-moz-box-sizing: border-box;
 }
 
-.settings__units {
+.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh.settings__units {
 	padding: 5px;
 	border: 1px solid #BEBEBE;
 	margin-left: 10px;
 	width: 75%;
 }
+
