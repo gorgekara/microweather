@@ -2,27 +2,44 @@
   'use strict';
 
   var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units={units}&q={location}',
+      forcastAPI = 'http://api.openweathermap.org/data/2.5/forecast?units={units}&q={location}',
       iconStr = 'icons/weather/{icon}.png',
       search = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #search',
       settingsBtn = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__link',
       settings = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__area',
       unitsDeg = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__units',
       canvasTemplate = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #canvas-template',
-      canvas = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .y-chrome-ext-canvas';
+      canvas = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .y-chrome-ext-canvas',
+      forcast = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .forcast-container',
+      forcastTemplate = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #forcast-template',
+      showForcastBtn = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .show-forcast',
+      months = ['Jan', 'Feb', 'March', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function fetcher(url, success, error) {
+    $.ajax({
+      url:  url,
+      type: 'POST',
+      success: success,
+      error: error
+    });
+  }
 
   /**
    * Fetches weather data from source
    * @param string search query
    */
   function fetchWeather(location) {    
-    var unitsCheck = localStorage.units || $(unitsDeg).val() || 'metric';
+    var unitsCheck = localStorage.units || $(unitsDeg).val() || 'metric',
+        successHandler,
+        errorHandler;
 
-    function errorHandler() {
+    errorHandler = function () {
       $(canvas).html('No city found. Please try again.');
+      $(showForcastBtn).hide();
       return;
-    }
+    };
 
-    function successHandler(data) {
+    successHandler = function (data) {
       if (!data || data.cod === '404') {
         errorHandler();
       }
@@ -50,18 +67,75 @@
 
       h.imgReplace($(canvas).find('img'));
       localStorage.setItem('location', location);
-    }    
+    };
 
-    $.ajax({
-      url:  h.bind(weatherAPI, {
-        units: unitsCheck,
-        location: location
-      }),
-      type: 'POST',
-      success: successHandler,
-      error: errorHandler
-    });
-    
+    fetcher(h.bind(weatherAPI, { units: unitsCheck, location: location }), successHandler, errorHandler);
+  }
+
+  function fetchForcast(location, fetch) {
+    var unitsCheck = localStorage.units || $(unitsDeg).val() || 'metric',
+        successHandler,
+        errorHandler;
+
+    errorHandler = function () {
+      $(canvas).html('No city found. Please try again.');
+      $(showForcastBtn).hide();
+      return;
+    };
+
+    successHandler = function (data) {
+      var daysForcast = data.list,
+          units = unitsCheck === 'metric' ? '&deg;C' : '&deg;F',
+          forcastTemp = '',
+          today = new Date().getDate(),
+          dateObj = {};
+
+      daysForcast.forEach(function (item) {
+        var itemDate = new Date(item.dt_txt);
+
+        if (itemDate.getDate() === today) {
+          return;
+        }
+
+        if (!dateObj.hasOwnProperty(itemDate.getDate())) {
+          dateObj[itemDate.getDate()] = [item];
+        } else {
+          dateObj[itemDate.getDate()].push(item);
+        }
+      });
+
+      $.each(dateObj, function (key, singleDate) {
+        var itemDate = new Date(singleDate[0].dt_txt);
+
+        forcastTemp += h.bind('<div class="single-date__title">{singleDate}</div>', { singleDate: [itemDate.getDate(), ' ', months[itemDate.getMonth()]].join('') });
+        forcastTemp += '<div class="single-date">';
+
+        singleDate.forEach(function (item) {
+          var itemDate = new Date(item.dt_txt);
+
+          forcastTemp += h.bind($(forcastTemplate).html(), {
+            icon: h.bind(iconStr, { icon: item.weather[0].icon }),
+            temp: item.main.temp + units,
+            temp_max: item.main.temp_max + units,
+            temp_min: item.main.temp_min + units,
+            time: [itemDate.getHours(), ':00'].join('')
+          });
+
+        });
+
+        forcastTemp += '</div>';
+      });
+
+      $(forcast).html(forcastTemp);
+      h.imgReplace($(forcast).find('img'));
+      $('.single-date').slick({
+        slidesToShow: 3,
+        prevArrow: '<button type="button" data-role="none" class="slick-prev" aria-label="Previous" tabindex="0" role="button">&larr;</button>',
+        nextArrow: '<button type="button" data-role="none" class="slick-next" aria-label="Next" tabindex="0" role="button">&rarr;</button>'
+      });
+    };
+
+    fetcher(h.bind(forcastAPI, { units: unitsCheck, location: location }), successHandler, errorHandler);
   }
 
   /**
@@ -74,6 +148,7 @@
     }
 
     fetchWeather($(this).val());
+    fetchForcast($(this).val());
   }
 
   function settingsClick() {
@@ -89,6 +164,17 @@
 
     localStorage.units = val;
     fetchWeather(localStorage.getItem('location'));
+    fetchForcast(localStorage.getItem('location'));
+  }
+
+  function showForcast() {
+    if (localStorage.getItem('location')) {
+      fetchWeather(localStorage.getItem('location'));
+      fetchForcast(localStorage.getItem('location'));
+    }
+
+    $(showForcastBtn).hide();
+    $(forcast).show();
   }
 
   $(document).ready(function () {
@@ -99,6 +185,7 @@
     $(search).on('keyup', searchKeyUp);
     $(settingsBtn).on('click', settingsClick);
     $(unitsDeg).on('change', unitsChange);
+    $(showForcastBtn).on('click', showForcast);
   });
 
 }(jQuery, window, Helper));

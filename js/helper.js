@@ -10,7 +10,11 @@ var Helper = (function ($) {
 			return;
 		}
 
-		imgEl.attr('src', imgEl.data('src'));
+		if (imgEl.length) {
+			$.each(imgEl, function () {
+				$(this).attr('src', $(this).data('src'));
+			});
+		}		
 	}
 
 	/**
