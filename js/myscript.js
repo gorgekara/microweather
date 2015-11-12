@@ -1,8 +1,8 @@
 (function ($, window, h) {
   'use strict';
 
-  var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units={units}&q={location}',
-      forcastAPI = 'http://api.openweathermap.org/data/2.5/forecast?units={units}&q={location}',
+  var weatherAPI = 'http://api.openweathermap.org/data/2.5/weather?units={units}&q={location}&APPID=a9bacbc366ab9c6ca5519cc7e7a63bc3',
+      forcastAPI = 'http://api.openweathermap.org/data/2.5/forecast?units={units}&q={location}&APPID=a9bacbc366ab9c6ca5519cc7e7a63bc3',
       iconStr = 'icons/weather/{icon}.png',
       search = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh #search',
       settingsBtn = '.micro-weather-knbgahoibccgfedbeamjlaipedimpfeh .settings__link',
